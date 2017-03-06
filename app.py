@@ -57,9 +57,8 @@ def twitter_auth():
         row = fetchnewscreenname.fetchone()
         print('newscreenname: {}'.format(row['screen_name']))
 
-    # session['screen_name'] = user.screen_name
-
-    return row['screen_name']
+    session['screen_name'] = row['screen_name']
+    return session['screen_name']
 
 
 @app.route('/logout')
