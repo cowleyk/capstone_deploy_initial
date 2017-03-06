@@ -57,19 +57,10 @@ def twitter_auth():
         row = fetchnewscreenname.fetchone()
         print('newscreenname: {}'.format(row['screen_name']))
 
-    return row['screen_name']
-        # return 'from db {}'.format(result[1])
-    #     return cls(screen_name=result[1], id=result[0],
-    #                oauth_token=result[2], oauth_token_secret=result[3])
-    #
-    # user = User.load_from_db_by_screen_name(access_token['screen_name'])
-    # if not user:
-    #     user = User(access_token['screen_name'], access_token['oauth_token'],
-    #                 access_token['oauth_token_secret'], None)
-    #     user.save_to_db()
-    #
     # session['screen_name'] = user.screen_name
-    #
+
+    return row['screen_name']
+
 
 @app.route('/logout')
 def logout():
