@@ -3,9 +3,6 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from twitter_utils import get_request_token, get_oauth_verifier_url, get_access_token
-from user import User
-from database import Database
-
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -18,8 +15,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 from models import Result
-
-Database.initialize(host='localhost', database='linreg', user='postgres', password='1234')
 
 @app.route('/')
 def hello():
@@ -39,15 +34,48 @@ def twitter_auth():
     oauth_verifier = request.args.get('oauth_verifier')
     access_token = get_access_token(session['request_token'], oauth_verifier)
 
-    user = User.load_from_db_by_screen_name(access_token['screen_name'])
-    if not user:
-        user = User(access_token['screen_name'], access_token['oauth_token'],
-                    access_token['oauth_token_secret'], None)
-        user.save_to_db()
+    result = db.session.execute(
+        "SELECT * FROM users WHERE screen_name=:param",
+        {"param": access_token['screen_name']}
+    )
+    row = result.fetchone()
 
-    session['screen_name'] = user.screen_name
+    if not row:
+        newscreenname = Result(
+            screen_name=access_token['screen_name'],
+            oauth_token=access_token['oauth_token'],
+            oauth_token_secret=access_token['oauth_token_secret'],
+            csv_data=None
+        )
+        db.session.add(newscreenname)
+        db.session.commit()
 
-    return 'hello there {}'.format(user.screen_name)
+        fetchnewscreenname = db.session.execute(
+            "SELECT * FROM users WHERE screen_name=:param",
+            {"param": access_token['screen_name']}
+        )
+        row = fetchnewscreenname.fetchone()
+        print('newscreenname: {}'.format(row['screen_name']))
+
+    return row['screen_name']
+        # return 'from db {}'.format(result[1])
+    #     return cls(screen_name=result[1], id=result[0],
+    #                oauth_token=result[2], oauth_token_secret=result[3])
+    #
+    # user = User.load_from_db_by_screen_name(access_token['screen_name'])
+    # if not user:
+    #     user = User(access_token['screen_name'], access_token['oauth_token'],
+    #                 access_token['oauth_token_secret'], None)
+    #     user.save_to_db()
+    #
+    # session['screen_name'] = user.screen_name
+    #
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return render_template('index.html')
+
 
 
 if __name__ == '__main__':
