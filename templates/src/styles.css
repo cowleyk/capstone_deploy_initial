@@ -1,0 +1,12 @@
+body{
+  background-color: #D2B48C;
+}
+
+button{
+  background-color: #04ADDD;
+}
+
+.highlight{
+  background-color: red;
+  color:white;
+}
