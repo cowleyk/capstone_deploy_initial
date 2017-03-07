@@ -8,7 +8,8 @@
     template: `
                 <p>csvmanage</p>
                 <br>
-                <a ui-sref="home">home</a>`  });
+                <a ui-sref="home">home</a>`
+  });
 
   csvmanageController.$inject = ['$scope', '$state'];
 
