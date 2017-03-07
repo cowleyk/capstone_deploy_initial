@@ -18,7 +18,7 @@ from models import Result
 
 @app.route('/')
 def hello():
-    return render_template('index.html')
+    return open('index.html')
 
 @app.route('/login/twitter')
 def twitter_login():
@@ -58,13 +58,13 @@ def twitter_auth():
         print('newscreenname: {}'.format(row['screen_name']))
 
     session['screen_name'] = row['screen_name']
-    return render_template('index.html')
+    return open('index.html')
 
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return render_template('index.html')
+    return open('index.html')
 
 
 
