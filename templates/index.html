@@ -7,12 +7,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-    <body>
+    <body ng-app="app">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
         <script src="https://unpkg.com/angular-ui-router@1.0.0-beta.3/release/angular-ui-router.js"></script>
         <div class="container">
           <ui-view></ui-view>
         </div>
+
+        <footer style="position:fixed;bottom:0;">
+          <p>kevin cowley</p>
+        </footer>
 
         <script src="{{ url_for('static', filename='app.config.js') }}"></script>
         <script src="{{ url_for('static', filename='app.module.js') }}"></script>
