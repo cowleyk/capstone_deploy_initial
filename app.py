@@ -79,7 +79,7 @@ def getuserdata():
         {"param": session['screen_name']}
     )
     row = result.fetchone()
-    return row
+    return row['screen_name']
 
 
 @app.route('/csvpost')
