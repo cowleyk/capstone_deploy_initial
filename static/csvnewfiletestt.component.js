@@ -28,6 +28,7 @@
     vm.$onInit = function(){
         console.log('csvmanage $onInit')
         console.log('change2')
+        vm.showUpload = true;
     }
     vm.upload = function(){
       var data = null;
