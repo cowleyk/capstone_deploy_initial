@@ -23,7 +23,7 @@ def hello():
 @app.route('/login/twitter')
 def twitter_login():
     if 'screen_name' in session:
-        return session['screen_name']
+        return 'youre already logged in as {}'.format(session['screen_name'])
     request_token = get_request_token()
     session['request_token'] = request_token
 
@@ -55,10 +55,10 @@ def twitter_auth():
             {"param": access_token['screen_name']}
         )
         row = fetchnewscreenname.fetchone()
-        print('newscreenname: {}'.format(row['screen_name']))
+        print('newscreenname db: {}'.format(row['screen_name']))
 
     session['screen_name'] = row['screen_name']
-    return row['screen_name']
+    return 'heres your sn: {}'.format(row['screen_name'])
 
 
 @app.route('/logout')
