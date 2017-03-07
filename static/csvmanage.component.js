@@ -5,8 +5,10 @@
   angular.module('app')
   .component('csvmanage', {
     controller: csvmanageController,
-    template: '<p>csvmanage</p>'
-  });
+    template: `
+                <p>csvmanage</p>
+                <br>
+                <a ui-sref="home">home</a>`  });
 
   csvmanageController.$inject = ['$scope', '$state'];
 
