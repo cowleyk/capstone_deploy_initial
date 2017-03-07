@@ -5,7 +5,7 @@
   .component('home', {
     controller: homeController,
     template: `
-                <p>homeController</p>
+                <p>homeController5.0</p>
                 <br>
                 <a ui-sref="csvmanage">csvmanage</a>`
   });
