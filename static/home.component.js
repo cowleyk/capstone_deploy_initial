@@ -4,7 +4,10 @@
   angular.module('app')
   .component('home', {
     controller: homeController,
-    template: `<p>homeController</p>`
+    template: `
+                <p>homeController</p>
+                <br>
+                <a ui-sref="csvmanage">csvmanage</a>`
   });
 
   homeController.$inject = ['$http', '$state'];

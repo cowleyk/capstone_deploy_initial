@@ -58,7 +58,7 @@ def twitter_auth():
         print('newscreenname: {}'.format(row['screen_name']))
 
     session['screen_name'] = row['screen_name']
-    return session['screen_name']
+    return render_template('index.html')
 
 
 @app.route('/logout')

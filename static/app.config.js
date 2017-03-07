@@ -15,6 +15,11 @@
         name: 'home',
         url: '/',
         component: 'home',
+      })
+      .state({
+        name: 'csvmanage',
+        url: '/csvmanage',
+        component: 'csvmanage',
       });
   }
 
