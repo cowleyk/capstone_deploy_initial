@@ -79,7 +79,8 @@ def getuserdata():
         {"param": session['screen_name']}
     )
     row = result.fetchone()
-    return row
+    returndata = '[{},{}]'.format(row['screen_name'], row['oauth_token'])
+    return returndata
 
 
 @app.route('/csvpost')
