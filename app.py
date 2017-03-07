@@ -66,6 +66,9 @@ def logout():
     session.clear()
     return render_template('index.html')
 
+@app.route('/test')
+def test():
+    return 'HIT TEST'
 
 
 if __name__ == '__main__':
