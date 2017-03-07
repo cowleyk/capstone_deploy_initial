@@ -18,6 +18,7 @@
 
      vm.$onInit = function(){
         console.log('homeController $onInit')
+        console.log('change')
      };
 
 
