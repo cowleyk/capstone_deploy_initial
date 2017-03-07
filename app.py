@@ -58,6 +58,8 @@ def twitter_auth():
         print('newscreenname db: {}'.format(row['screen_name']))
 
     session['screen_name'] = row['screen_name']
+    session['oauth_token'] = row['oauth_token']
+    session['oauth_token_secret'] = row['oauth_token_secret']
     return 'heres your sn: {}'.format(row['screen_name'])
 
 
@@ -69,6 +71,43 @@ def logout():
 @app.route('/test')
 def test():
     return 'HIT TEST'
+
+@app.route('/getuserdata')
+def getuserdata():
+    result = db.session.execute(
+        "SELECT * FROM users WHERE screen_name=:param",
+        {"param": session['screen_name']}
+    )
+    row = result.fetchone()
+    return row['screen_name']
+
+
+@app.route('/csvpost')
+def csvpost():
+    pass
+    # result = db.session.execute(
+    #     "SELECT * FROM users WHERE screen_name=:param",
+    #     {"param": session['screen_name']}
+    # )
+    # row = result.fetchone()
+    # if not row['csv_data']:
+    #     newscreenname = Result(
+    #         screen_name=access_token['screen_name'],
+    #         oauth_token=access_token['oauth_token'],
+    #         oauth_token_secret=access_token['oauth_token_secret'],
+    #         csv_data=None
+    #     )
+    #     db.session.add(newscreenname)
+    #     db.session.commit()
+    #
+    #     fetchnewscreenname = db.session.execute(
+    #         "SELECT * FROM users WHERE screen_name=:param",
+    #         {"param": access_token['screen_name']}
+    #     )
+    #     row = fetchnewscreenname.fetchone()
+    #     print('newscreenname db: {}'.format(row['screen_name']))
+
+
 
 
 if __name__ == '__main__':

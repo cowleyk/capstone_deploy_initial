@@ -5,7 +5,7 @@
   angular.module('app')
   .component('csvmanage', {
     controller: csvmanageController,
-    template: `<p>csvmanage</p><br>
+    template: `<p>csvmanage5.1</p><br>
             <a ui-sref="home">home</a><br><br>
             <div class="container">
               <div ng-if="$ctrl.showUpload">
@@ -20,15 +20,18 @@
             </div>`
   });
 
-  csvmanageController.$inject = ['$scope', '$state'];
+  csvmanageController.$inject = ['$http', '$state'];
 
-  function csvmanageController($scope, $state) {
+  function csvmanageController($http, $state) {
     const vm = this;
 
     vm.$onInit = function(){
         console.log('csvmanage $onInit')
         console.log('change2')
         vm.showUpload = true;
+        $http.get('/getuserdata').then(function(row){
+            console.log(row);
+        })
     }
     vm.upload = function(){
       var data = null;
