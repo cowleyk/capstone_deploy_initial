@@ -5,11 +5,8 @@
   angular.module('app')
   .component('csvmanage', {
     controller: csvmanageController,
-    template: `<p>csvmanage</p>
-            <br>
-            <a ui-sref="home">home</a>
-            <br>
-            <br>
+    template: `<p>csvmanage</p><br>
+            <a ui-sref="home">home</a><br><br>
             <div class="container">
               <div ng-if="$ctrl.showUpload">
               <form ng-submit="$ctrl.upload()">
@@ -18,7 +15,6 @@
                   <br>
                 <button type="submit">Upload</button>
               </form>
-
               <br>
               </div>
             </div>`
