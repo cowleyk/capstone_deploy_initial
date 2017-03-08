@@ -79,18 +79,25 @@ def getuserdata():
         {"param": session['screen_name']}
     )
     row = result.fetchone()
-    returndata = '[{},{}]'.format(row['screen_name'], row['oauth_token'])
+    returndata = '{}~{}'.format(row['screen_name'], row['oauth_token'])
+    print(returndata)
     return returndata
 
 
 @app.route('/csvpost')
 def csvpost():
-    pass
-    # result = db.session.execute(
-    #     "SELECT * FROM users WHERE screen_name=:param",
-    #     {"param": session['screen_name']}
-    # )
-    # row = result.fetchone()
+    # pass
+    csvcookie = request.cookies.get("csv_data")
+    print('csvcookie: {}'.format(csvcookie))
+    result = db.session.execute(
+        "UPDATE users SET csv_data=:paramcsv WHERE screen_name=:param RETURNING csv_data",
+        {"param": session['screen_name'], "paramcsv": csvcookie }
+    )
+    row = result.fetchone()
+    returncookie = 'csvcookie: {}'.format(row[0])
+    print('returncookie: {}'.format(returncookie))
+    return returncookie
+
     # if not row['csv_data']:
     #     newscreenname = Result(
     #         screen_name=access_token['screen_name'],

@@ -5,11 +5,18 @@
     <meta charset="utf-8">
     <title>RegressionDev</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesdepone.css') }}">
 </head>
     <body ng-app="app">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
         <script src="https://unpkg.com/angular-ui-router@1.0.0-beta.3/release/angular-ui-router.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.10.0/math.min.js"></script>
+        <header style="border-bottom:1px solid #E1E1E1;">
+          <div class="container">
+            <a ui-sref="home">Home</a>
+            <a ui-sref="csvmanage" style="float:right">CSV Manager</a>
+          </div>
+        </header>
         <div class="container">
           <ui-view></ui-view>
         </div>
@@ -19,9 +26,12 @@
         </footer>
 
         <script src="{{ url_for('static', filename='app.module.js') }}"></script>
-        <script src="{{ url_for('static', filename='app.config.js') }}"></script>
-        <script src="{{ url_for('static', filename='home.component.js') }}"></script>
-        <script src="{{ url_for('static', filename='csvgettest.component.js') }}"></script>
+        <script src="{{ url_for('static', filename='app.configr.js') }}"></script>
+        <script src="{{ url_for('static', filename='homedepone.component.js') }}"></script>
+        <script src="{{ url_for('static', filename='csvmanagedepone.component.js') }}"></script>
+        <script src="{{ url_for('static', filename='regressiondepone.component.js') }}"></script>
+        <script src="{{ url_for('static', filename='fdepone.js') }}"></script>
+        <script src="{{ url_for('static', filename='tdepone.js') }}"></script>
 
     </body>
 </html>
