@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, session, redirect, request
+from flask import Flask, render_template, session, redirect, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from twitter_utils import get_request_token, get_oauth_verifier_url, get_access_token
 
@@ -23,7 +23,9 @@ def hello():
 @app.route('/login/twitter')
 def twitter_login():
     if 'screen_name' in session:
-        return 'youre already logged in as {}'.format(session['screen_name'])
+        response = make_response(render_template('index.html'))
+        response.set_cookie('screen_name', session['screen_name'])
+        return response
     request_token = get_request_token()
     session['request_token'] = request_token
 
@@ -60,7 +62,9 @@ def twitter_auth():
     session['screen_name'] = row['screen_name']
     session['oauth_token'] = row['oauth_token']
     session['oauth_token_secret'] = row['oauth_token_secret']
-    return 'heres your sn: {}'.format(row['screen_name'])
+    response = make_response(render_template('index.html'))
+    response.set_cookie('screen_name', session['screen_name'])
+    return response
 
 
 @app.route('/logout')
