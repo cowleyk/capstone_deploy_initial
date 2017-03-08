@@ -18,7 +18,17 @@ from models import Result
 
 @app.route('/')
 def hello():
-    return render_template('index.html')
+    if 'screen_name' in session:
+        response = make_response(render_template('index.html'))
+        response.set_cookie('screen_name', session['screen_name'])
+        return response
+    request_token = get_request_token()
+    session['request_token'] = request_token
+
+    return redirect(get_oauth_verifier_url(request_token))
+
+    # original def hello():
+        # return render_template('index.html')
 
 @app.route('/login/twitter')
 def twitter_login():
