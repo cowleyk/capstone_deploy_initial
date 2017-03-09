@@ -18,6 +18,24 @@
             <a ui-sref="csvmanage" style="float:right">CSV Manager</a>
           </div>
         </header>
+
+        <div id="intro" class="container">
+            <p style="text-align:center;">Hello. Thanks for signing in.
+                Below are the assumptions made for generating a linear regression model.  Enjoy!</p>
+            <ol>
+                <li>Your dependent variable should be measured on a continuous scale</li>
+                <li>You have two or more independent variables, which can be either continuous or categorical</li>
+                <li>You should have independence of observations/residuals</li>
+                <li>There needs to be a linear relationship</li>
+                <li>Your data needs to show homoscedasticity</li>
+                <li>Your data must not show multicollinearity</li>
+                <li>There should be no significant outliers, high leverage points or highly influential points</li>
+                <li>The residuals are approximately normally distributed</li>
+            </ol>
+            <button ui-sref="csvmanage">Enter</button>
+        </div>
+
+
         <div class="container">
           <ui-view></ui-view>
         </div>
@@ -28,8 +46,8 @@
 
         <script src="{{ url_for('static', filename='app.module.js') }}"></script>
         <script src="{{ url_for('static', filename='app.configr.js') }}"></script>
-        <script src="{{ url_for('static', filename='homedepone.component.js') }}"></script>
-        <script src="{{ url_for('static', filename='csvmanagedepone.component.js') }}"></script>
+        <script src="{{ url_for('static', filename='homedepfour.component.js') }}"></script>
+        <script src="{{ url_for('static', filename='csvmanagedepseven.component.js') }}"></script>
         <script src="{{ url_for('static', filename='regressiondepone.component.js') }}"></script>
         <script src="{{ url_for('static', filename='fdepone.js') }}"></script>
         <script src="{{ url_for('static', filename='tdepone.js') }}"></script>

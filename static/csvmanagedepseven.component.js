@@ -38,6 +38,11 @@
 
     vm.$onInit = function(){
       console.log('csvmanage');
+      console.log('depthree');
+      document.getElementById('intro').innerHTML = '';
+      $http.get('/getuserdata').then(function(data){
+        console.log('get return', data);
+      })
     };
 
     vm.upload = function(){
@@ -69,6 +74,9 @@
 
     vm.goToRegression = function(){
       console.log('goToRegression');
+      $http.get('/csvpost').then(function(data){
+        console.log('csvpost return', data)
+      })
       $state.go("regression", {matrixObj: matrixObj});
     }
 

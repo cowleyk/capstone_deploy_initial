@@ -2,7 +2,8 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, request, make_response
 from flask_sqlalchemy import SQLAlchemy
-from twitter_utils import get_request_token, get_oauth_verifier_url, get_access_token
+from twitter_utils import get_request_token, get_oauth_verifier_url, get_access_token, twitter_request
+from random import randint
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -15,6 +16,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 from models import Result
+
+followerslist = []
 
 @app.route('/')
 def hello():
@@ -72,19 +75,29 @@ def twitter_auth():
     session['screen_name'] = row['screen_name']
     session['oauth_token'] = row['oauth_token']
     session['oauth_token_secret'] = row['oauth_token_secret']
+
+    followersuri = 'https://api.twitter.com/1.1/followers/list.json?cursor=-1&screen_name={}&skip_status=true&include_user_entities=false'.format(row['screen_name'])
+    followers = twitter_request(row['oauth_token'], row['oauth_token_secret'], followersuri, 'GET')
+    for fllw in followers['users']:
+        followerslist.append(fllw['screen_name'])
+    print(followerslist)
     response = make_response(render_template('index.html'))
     response.set_cookie('screen_name', session['screen_name'])
     return response
 
+# @app.route('/senddm')
+# def senddm():
+#     randomnum = randint(0, len(followerslist)-1)
+#     text = 'You%20should%20tryout%20linreg%20dash%20five%20dot%20herokuapp%20dot%20com!'
+#     dmuri = 'https://api.twitter.com/1.1/direct_messages/new.json?text={}&screen_name={}'.format(text, followerslist[randomnum])
+#     dmpost = twitter_request(session['oauth_token'], session['oauth_token_secret'], dmuri, 'POST')
+#     print(dmpost)
+#     return dmpost
 
 @app.route('/logout')
 def logout():
     session.clear()
     return render_template('index.html')
-
-@app.route('/test')
-def test():
-    return 'HIT TEST'
 
 @app.route('/getuserdata')
 def getuserdata():
@@ -93,7 +106,7 @@ def getuserdata():
         {"param": session['screen_name']}
     )
     row = result.fetchone()
-    returndata = '{}~{}'.format(row['screen_name'], row['oauth_token'])
+    returndata = '{}~{}'.format(row['screen_name'], row['csv_data'])
     print(returndata)
     return returndata
 
@@ -108,9 +121,9 @@ def csvpost():
         {"param": session['screen_name'], "paramcsv": csvcookie }
     )
     row = result.fetchone()
-    returncookie = 'csvcookie: {}'.format(row[0])
-    print('returncookie: {}'.format(returncookie))
-    return returncookie
+    db.session.commit()
+    print('row[0]: {}'.format(row[0]))
+    return row[0]
 
     # if not row['csv_data']:
     #     newscreenname = Result(
