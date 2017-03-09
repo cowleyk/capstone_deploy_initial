@@ -19,7 +19,7 @@
       </form>
   </div>
   <div class="six columns" ng-if="$ctrl.showUpload">
-    <p ng-if="$ctrl.serverDataAvailable" style="height:20px; margin:5px;">Load Previously Used .csv File</p><br>
+    <p ng-if="$ctrl.serverDataAvailable" style="height:20px; margin:5px;">Load Previously Used .csv File</p>
     <button ng-if="$ctrl.serverDataAvailable" ng-click="$ctrl.useServerData()">Load</button>
   </div>
 </div>
