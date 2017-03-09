@@ -6,24 +6,31 @@
   .component('csvmanage', {
     controller: csvmanageController,
     template: `<br>
+<br>
 <div class="container">
-  <div ng-if="$ctrl.showUpload">
-  <form ng-submit="$ctrl.upload()">
-    <input type="file"
-      id="fileinput" name="file" />
-      <br>
-    <button type="submit">Upload</button>
-  </form>
-
-  <br>
+  <h2 ng-if="$ctrl.showUpload">Select .csv File</h2>
+  <h2 ng-if="!$ctrl.showUpload">Select Regression</h2>
+  <div class="row">
+    <div class="six columns" ng-if="$ctrl.showUpload">
+      <form ng-submit="$ctrl.upload()">
+        <input type="file"
+          id="fileinput" name="file" style="height:20px; margin:5px;"/>
+        <button type="submit">Upload</button>
+      </form>
+  </div>
+  <div class="six columns" ng-if="$ctrl.showUpload">
+    <p ng-if="$ctrl.serverDataAvailable" style="height:20px; margin:5px;">Load Previously Used .csv File</p>
+    <button ng-if="$ctrl.serverDataAvailable" ng-click="$ctrl.useServerData()">Load</button>
   </div>
 </div>
-    <!-- ng-repeat of input boxes for headerArr -->
+</div>
+<div class="container">
   <div ng-if="$ctrl.showOptions">
     <form ng-submit="$ctrl.goToRegression()">
-      <button type="submit">Get Regression Model</button>
+      <button type="submit">Multiple Linear Regression</button>
     </form>
-  </div>`
+  </div>
+</div>`
   });
 
   csvmanageController.$inject = ['$http', '$state'];
@@ -42,6 +49,10 @@
       document.getElementById('intro').innerHTML = '';
       $http.get('/getuserdata').then(function(data){
         console.log('get return', data);
+        if(data.status === 200){
+          vm.serverDataAvailable = true;
+        }
+        vm.serverData = data.data;
       })
     };
 
@@ -61,7 +72,6 @@
         document.cookie = csvCookie;
 
         vm.initializeMatrixObj(rawcsvstring);
-
       };
       reader.onerror = function() {
         alert('Unable to read ' + file.fileName);
@@ -69,8 +79,16 @@
 
       vm.showUpload = !vm.showUpload;
       vm.showOptions = !vm.showOptions;
-
     };
+
+    vm.useServerData = function(){
+      console.log('useServerData');
+      console.log(vm.serverData);
+      let rawcsvstring = "*"+vm.serverData+"*"
+      vm.initializeMatrixObj(rawcsvstring)
+      vm.showUpload = !vm.showUpload;
+      vm.showOptions = !vm.showOptions;
+    }
 
     vm.goToRegression = function(){
       console.log('goToRegression');
@@ -81,9 +99,15 @@
     }
 
     vm.initializeMatrixObj = function(rawcsvstring){
-      rawcsvstring = rawcsvstring.substring(1, rawcsvstring.length-1);
-
-      let csvReplaceString = rawcsvstring.replace(/\\r\\n/g, '%');
+      let csvReplaceString;
+      if(rawcsvstring[0] === '*'){
+        rawcsvstring = rawcsvstring.substring(1, rawcsvstring.length-1);
+        csvReplaceString = rawcsvstring.replace(/rn/g, '%');
+      }
+      else{
+        rawcsvstring = rawcsvstring.substring(1, rawcsvstring.length-1);
+        csvReplaceString = rawcsvstring.replace(/\\r\\n/g, '%');
+      }
 
       let csvLineSplitArr = csvReplaceString.split(/%/);
       vm.headerArr = csvLineSplitArr.shift().split(',');

@@ -30,19 +30,19 @@ def hello():
 
     return redirect(get_oauth_verifier_url(request_token))
 
-    # original def hello():
-        # return render_template('index.html')
+# original def hello():
+    # return render_template('index.html')
 
-@app.route('/login/twitter')
-def twitter_login():
-    if 'screen_name' in session:
-        response = make_response(render_template('index.html'))
-        response.set_cookie('screen_name', session['screen_name'])
-        return response
-    request_token = get_request_token()
-    session['request_token'] = request_token
-
-    return redirect(get_oauth_verifier_url(request_token))
+# @app.route('/login/twitter')
+# def twitter_login():
+#     if 'screen_name' in session:
+#         response = make_response(render_template('index.html'))
+#         response.set_cookie('screen_name', session['screen_name'])
+#         return response
+#     request_token = get_request_token()
+#     session['request_token'] = request_token
+#
+#     return redirect(get_oauth_verifier_url(request_token))
 
 @app.route('/auth/twitter')
 def twitter_auth():
@@ -106,44 +106,19 @@ def getuserdata():
         {"param": session['screen_name']}
     )
     row = result.fetchone()
-    returndata = '{}~{}'.format(row['screen_name'], row['csv_data'])
-    print(returndata)
-    return returndata
+    return row['csv_data']
 
 
 @app.route('/csvpost')
 def csvpost():
-    # pass
     csvcookie = request.cookies.get("csv_data")
-    print('csvcookie: {}'.format(csvcookie))
     result = db.session.execute(
         "UPDATE users SET csv_data=:paramcsv WHERE screen_name=:param RETURNING csv_data",
         {"param": session['screen_name'], "paramcsv": csvcookie }
     )
     row = result.fetchone()
     db.session.commit()
-    print('row[0]: {}'.format(row[0]))
     return row[0]
-
-    # if not row['csv_data']:
-    #     newscreenname = Result(
-    #         screen_name=access_token['screen_name'],
-    #         oauth_token=access_token['oauth_token'],
-    #         oauth_token_secret=access_token['oauth_token_secret'],
-    #         csv_data=None
-    #     )
-    #     db.session.add(newscreenname)
-    #     db.session.commit()
-    #
-    #     fetchnewscreenname = db.session.execute(
-    #         "SELECT * FROM users WHERE screen_name=:param",
-    #         {"param": access_token['screen_name']}
-    #     )
-    #     row = fetchnewscreenname.fetchone()
-    #     print('newscreenname db: {}'.format(row['screen_name']))
-
-
-
 
 if __name__ == '__main__':
     app.run()

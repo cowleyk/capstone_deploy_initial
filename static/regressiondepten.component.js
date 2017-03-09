@@ -40,8 +40,8 @@
       <p><em>//$ctrl.independent//</em> = <em ng-repeat="var in $ctrl.varTableArr"> <b ng-if="var.name !== 'Constant'">+</b> //var.coeff//<b ng-if="var.name !== 'Constant'">(//var.name//)</b></em></p>
     </div>
     <p>R<sup>2</sup><sub>adj</sub> = //$ctrl.regressionObj.r2adj//</p>
-    <p>F<sub>test</sub> = F<sub>0.05,n-p,k</sub> vs F<sub>0</sub></p>
-    <p ng-class="{highlight: $ctrl.regressionObj.f0 < $ctrl.regressionObj.f0Table}">//$ctrl.regressionObj.fTable// <em>//$ctrl.comparator//</em> //$ctrl.regressionObj.f0// <em ng-if="$ctrl.ftestCheck"> &#10004;</em><em ng-if="!$ctrl.ftestCheck"> &#9747;</em></p>
+    <p>F<sub>test</sub> = F<sub>0</sub> vs F<sub>0.05,n-p,k</sub></p>
+    <p ng-class="{highlight: $ctrl.regressionObj.f0 < $ctrl.regressionObj.f0Table}">//$ctrl.regressionObj.f0// <em>//$ctrl.comparator//</em> //$ctrl.regressionObj.fTable// <em ng-if="$ctrl.ftestCheck"> &#10004;</em><em ng-if="!$ctrl.ftestCheck"> &#9747;</em></p>
     <p>//$ctrl.blurb//</p>
     <button class="tanButton" ng-click="$ctrl.toggleRegTable()">Show Table</button>
   </div>
@@ -191,14 +191,14 @@
       let fTable = f0Array[n-p-1][k-1];
       let tTable = tObj[n-p];
 
-      if (fTable > f0){
+      if (f0 > fTable){
         vm.comparator = '>';
-        vm.blurb = `${independentVar} is not linearly related any dependent variable`;
+        vm.blurb = `${independentVar} is linearly related to at least one dependent variable`;
+        vm.ftestCheck = true;
       }
       else{
         vm.comparator = '<'
-        vm.blurb = `${independentVar} is linearly related to at least one dependent variable`;
-        vm.ftestCheck = true;
+        vm.blurb = `${independentVar} is not linearly related any dependent variable`;
       }
 
       vm.regressionObj ={
