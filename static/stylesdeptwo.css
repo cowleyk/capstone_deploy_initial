@@ -6,6 +6,10 @@ button{
   background-color: #04ADDD;
 }
 
+.tanButton{
+  background-color:#D2B48C;
+}
+
 a{
   float:left;
 }

@@ -31,10 +31,48 @@
   </form>
 </div>
 
+<!-- synposis blurbs -->
+<div class="row" ng-if="$ctrl.showBlurbs">
+  <div class="five columns" style="background-color:#04ADDD; padding: 5%; border-radius:10%;">
+    <h3>Regression Synopsis</h3>
+    <div style="background-color:#D2B48C; text-align:center; border-radius:10%;">
+      <p><u>Model Equation</u></p>
+      <p><em>//$ctrl.independent//</em> = <em ng-repeat="var in $ctrl.varTableArr"> <b ng-if="var.name !== 'Constant'">+</b> //var.coeff//<b ng-if="var.name !== 'Constant'">(//var.name//)</b></em></p>
+    </div>
+    <p>R<sup>2</sup><sub>adj</sub> = //$ctrl.regressionObj.r2adj//</p>
+    <p>F<sub>test</sub> = F<sub>0.05,n-p,k</sub> vs F<sub>0</sub></p>
+    <p ng-class="{highlight: $ctrl.regressionObj.f0 < $ctrl.regressionObj.f0Table}">//$ctrl.regressionObj.fTable// <em>//$ctrl.comparator//</em> //$ctrl.regressionObj.f0// <em ng-if="$ctrl.ftestCheck"> &#10004;</em><em ng-if="!$ctrl.ftestCheck"> &#9747;</em></p>
+    <p>//$ctrl.blurb//</p>
+    <button class="tanButton" ng-click="$ctrl.toggleRegTable()">Show Table</button>
+  </div>
+  <div class="seven columns" style="background-color:#04ADDD; padding: 5%; border-radius:10%;">
+    <h3>Coefficient Synopsis</h3>
+    <p>t<sub>&alpha;/2,(n-p)</sub> = //$ctrl.varTableArr[0].tTable//</p>
+    <table>
+      <tr>
+        <th>Coefficient</th>
+        <th>&beta;</th>
+        <th>t<sub>0</sub></th>
+        <th>t<sub>0</sub> &gt; t<sub>&alpha;/2,(n-p)</sub>?</th>
+      </tr>
+      <tr ng-repeat="var in $ctrl.varTableArr">
+        <td>//var.name//</td>
+        <td>var.coeff</td>
+        <td>//var.t//</td>
+        <td><em ng-if="var.t>$ctrl.varTableArr[0].tTable"> &#10004; //var.name// contributes significantly to the model</em>
+            <em ng-if="var.t<$ctrl.varTableArr[0].tTable"> &#9747; //var.name// should be removed the model</em>
+        </td>
+      </tr>
+    </table>
+    <button class="tanButton" ng-click="$ctrl.toggleVarTable()">Show Table</button>
+  </div>
+</div>
+<p> </p>
+<br>
+
 <!-- table for overall regression -->
-<div class="container" ng-if="$ctrl.showTable">
+<div class="container" ng-if="$ctrl.showTableReg">
   <table style="border:1px solid #E1E1E1; border-radius:10%; padding:5%;">
-    <p style="text-align:center;"><u>Analysis of Variance</u></p>
     <tr>
       <th>Source Of Variation</th>
       <th>Sum of Squares</th>
@@ -65,14 +103,10 @@
     </tr>
   </table>
 </div>
-<br>
 
-<br>
 <!-- table for dependent variable analysis -->
-<div class="container" ng-if="$ctrl.showTable">
-  <p>R<sup>2</sup><sub>adj</sub> = //$ctrl.regressionObj.r2adj//</p>
+<div class="container" ng-if="$ctrl.showTableVar">
   <table style="border:1px solid #E1E1E1; border-radius:10%; padding:5%;">
-    <p style="text-align:center;"><u>Regression Analysis</u></p>
     <tr>
       <th>Variable</th>
       <th>Coefficient (&beta;)</th>
@@ -96,16 +130,22 @@
   function regressionController($http, $stateParams, $state){
     const vm = this;
     vm.showOptions = true;
-    vm.showTable = false;
+    vm.showBlurbs = false;
+    vm.showTableReg = false;
+    vm.showTableVar = false;
 
     vm.$onInit = function(){
-      // console.log('$onInit fired');
       vm.matrixObj = $stateParams.matrixObj;
-      console.log('matrixObj', vm.matrixObj);
     }; // close vm.$onInit
 
+    vm.toggleRegTable = function(){
+      vm.showTableReg = !vm.showTableReg;
+    };
+    vm.toggleVarTable = function(){
+      vm.showTableVar = !vm.showTableVar;
+    };
+
     vm.setSelection = function(){
-      let depVarTableArr =[];
       let independentVar = vm.independent;
       let independentObj = {};
       let dependentObjArr = [];
@@ -121,7 +161,6 @@
           dependentObjArr.push(elem);
         }
       });
-      console.log('dependentObjArr', dependentObjArr);
 
       // define xMatrix, yMatrix
       vm.matrixObj.allDataMatrix.forEach(function(lineArr){
@@ -151,6 +190,16 @@
       let f0 = msr/mse
       let fTable = f0Array[n-p-1][k-1];
       let tTable = tObj[n-p];
+
+      if (fTable > f0){
+        vm.comparator = '>';
+        vm.blurb = `${independentVar} is not linearly related any dependent variable`;
+      }
+      else{
+        vm.comparator = '<'
+        vm.blurb = `${independentVar} is linearly related to at least one dependent variable`;
+        vm.ftestCheck = true;
+      }
 
       vm.regressionObj ={
         n: n,
@@ -192,16 +241,13 @@
         vm.varTableArr.push(coeffObj);
       }
 
-
       vm.showOptions = false;
-      vm.showTable = true;
+      vm.showBlurbs = true;
     }; // close vm.setSelection
 
     vm.dependentFilter = function(val){
       return val.name !== vm.independent;
     };
-
-
 
   } // close controller
 
