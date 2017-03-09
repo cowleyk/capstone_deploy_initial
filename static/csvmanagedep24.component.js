@@ -65,7 +65,7 @@
       var reader = new FileReader();
       reader.readAsText(file);
       reader.onload = function(event) {
-        vm.csvData = event.target.result;
+        var csvData = event.target.result;
         rawcsvstring = JSON.stringify(csvData);
 
         var csvCookie = 'csv_data='+JSON.stringify(csvData);
