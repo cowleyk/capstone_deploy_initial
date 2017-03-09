@@ -14,12 +14,12 @@
     <div class="six columns" ng-if="$ctrl.showUpload">
       <form ng-submit="$ctrl.upload()">
         <input type="file"
-          id="fileinput" name="file" style="height:20px; margin:5px;"/>
+          id="fileinput" name="file" style="height:20px; margin:5px;"/><br>
         <button type="submit">Upload</button>
       </form>
   </div>
   <div class="six columns" ng-if="$ctrl.showUpload">
-    <p ng-if="$ctrl.serverDataAvailable" style="height:20px; margin:5px;">Load Previously Used .csv File</p>
+    <p ng-if="$ctrl.serverDataAvailable" style="height:20px; margin:5px;">Load Previously Used .csv File</p><br>
     <button ng-if="$ctrl.serverDataAvailable" ng-click="$ctrl.useServerData()">Load</button>
   </div>
 </div>
