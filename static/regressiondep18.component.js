@@ -35,10 +35,7 @@
 <div class="row" ng-if="$ctrl.showBlurbs">
   <div class="five columns" style="background-color:#04ADDD; padding: 5%; border-radius:10%;">
     <h3>Regression Synopsis</h3>
-    <div style="background-color:#D2B48C; text-align:center; border-radius:10%;">
-      <p><u>Model Equation</u></p>
-      <p><em>//$ctrl.independent//</em> = <em ng-repeat="var in $ctrl.varTableArr"> <b ng-if="var.name !== 'Constant'">+</b> //var.coeff//<b ng-if="var.name !== 'Constant'">(//var.name//)</b></em></p>
-    </div>
+    <p><em>//$ctrl.independent//</em> = <em ng-repeat="var in $ctrl.varTableArr"> <b ng-if="var.name !== 'Constant'">+</b> //var.coeff//<b ng-if="var.name !== 'Constant'">(//var.name//)</b></em></p>
     <p>R<sup>2</sup><sub>adj</sub> = //$ctrl.regressionObj.r2adj//</p>
     <p>F<sub>test</sub> = F<sub>0</sub> vs F<sub>0.05,n-p,k</sub></p>
     <p ng-class="{highlight: $ctrl.regressionObj.f0 < $ctrl.regressionObj.f0Table}">//$ctrl.regressionObj.f0// <em>//$ctrl.comparator//</em> //$ctrl.regressionObj.fTable// <em ng-if="$ctrl.ftestCheck"> &#10004;</em><em ng-if="!$ctrl.ftestCheck"> &#9747;</em></p>
@@ -57,7 +54,7 @@
       </tr>
       <tr ng-repeat="var in $ctrl.varTableArr">
         <td>//var.name//</td>
-        <td>var.coeff</td>
+        <td>//var.coeff//</td>
         <td>//var.t//</td>
         <td><em ng-if="var.t>$ctrl.varTableArr[0].tTable"> &#10004; //var.name// contributes significantly to the model</em>
             <em ng-if="var.t<$ctrl.varTableArr[0].tTable"> &#9747; //var.name// should be removed the model</em>
@@ -77,7 +74,7 @@
     <h3>Prediction of New Observations</h3>
     <form ng-submit="$ctrl.getPrediction()" ng-if="!$ctrl.showPrediction">
       <div ng-repeat="var in $ctrl.varTableArr">
-        <label for="var.name">//var.name//</label>
+        <label ng-if="var.name !== 'Constant'" for="var.name">//var.name//</label>
         <input type="text" id="var.name" ng-model="var.modinput" ng-if="var.name !== 'Constant'">
       </div>
       <button class="tanButton" type="submit">Get Prediction</button>
@@ -85,6 +82,8 @@
     <button class="tanButton" style="text-align:center; width:75%;" ng-if="$ctrl.showPrediction">//$ctrl.predictMinus// &le; Y<sub>0</sub> &le; //$ctrl.predictPlus//</button>
   </div>
 </div>
+<p> </p>
+<br>
 
 <!-- table for overall regression -->
 <div class="container" ng-if="$ctrl.showTableReg">
