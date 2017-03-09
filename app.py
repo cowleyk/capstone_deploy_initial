@@ -30,9 +30,6 @@ def hello():
 
     return redirect(get_oauth_verifier_url(request_token))
 
-# original def hello():
-    # return render_template('index.html')
-
 # @app.route('/login/twitter')
 # def twitter_login():
 #     if 'screen_name' in session:
